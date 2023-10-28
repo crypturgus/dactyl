@@ -24,3 +24,5 @@ flake8:
 
 requirements:
 	docker-compose run api sh -c "poetry export -f requirements.txt --output requirements.txt --without-hashes && exit"
+
+lint: isort black flake8
