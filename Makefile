@@ -13,4 +13,4 @@ isort:
 black:
 	docker-compose exec api sh -c "black . && exit"
 flake8:
-	docker-compose exec api sh -c "flake8 . && exit"
+	docker-compose exec api sh -c "flake8 ."

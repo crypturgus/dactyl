@@ -13,7 +13,7 @@ services:
     build:
       context: .
       dockerfile: dockers/api/Dockerfile.dev
-    command: ["/tmp/wait-for-it.sh", "db:5432", "--", "python", "manage.py", "runserver", "0.0.0.0:8000"]
+    command: ["/tmp/entrypoint.sh"]
     env_file:
       - .env.dev # Specify your .env.dev file here
     volumes:

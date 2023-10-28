@@ -19,8 +19,12 @@ ENV PYTHONUNBUFFERED 1
 
 # Copy the wait-for-it script
 COPY scripts/wait-for-it.sh /tmp/wait-for-it.sh
-RUN ls -la
 RUN chmod +x /tmp/wait-for-it.sh
+
+# Copy the entrypoint script
+COPY scripts/entrypoint.sh /tmp/entrypoint.sh
+RUN chmod +x /tmp/entrypoint.sh
+
 
 # Expose the port the app runs on
 EXPOSE 8000
