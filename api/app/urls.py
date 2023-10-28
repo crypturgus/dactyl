@@ -24,6 +24,6 @@ from user.schema import user_schema  # adjust the import to your project structu
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('graphql/', GraphQLView.as_view(schema=user_schema), name='graphql'),
+    path('', GraphQLView.as_view(schema=user_schema), name='graphql'),
 
 ]
