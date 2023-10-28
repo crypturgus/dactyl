@@ -1,0 +1,18 @@
+# Base Image
+FROM node:14
+
+# Working Directory
+WORKDIR /app
+
+# Install dependencies
+COPY ui/package*.json ./
+RUN npm install
+
+# Copy local code to the container image.
+COPY ui/ ./
+
+# Port Configuration
+EXPOSE 5173
+
+# Run command
+CMD ["npm", "run", "dev"]
