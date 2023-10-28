@@ -17,6 +17,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from django.urls import path
+from strawberry.django.views import GraphQLView
+from user.schema import user_schema  # adjust the import to your project structure
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path('graphql/', GraphQLView.as_view(schema=user_schema), name='graphql'),
+
 ]
