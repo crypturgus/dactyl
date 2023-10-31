@@ -4,7 +4,7 @@ set +x
 ## 1. Install dependencies
 #poetry config virtualenvs.create false \
 #  && poetry install --no-interaction --no-ansi
-
+pip install --upgrade pip
 pip install -r requirements.txt
 pip install gunicorn
 pip install uvicorn
