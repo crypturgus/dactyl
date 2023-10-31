@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "bash vercel_migrate.sh",
+    "build": "bash vercel_migrate.sh && echo 'build done'",
     "start": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:app"
   }
 }
