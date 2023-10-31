@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "bash vercel_migrate.sh && gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:app",
+    "build": "bash vercel_migrate.sh",
     "preview": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:app",
     "run": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:app",
     "start": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:app",
