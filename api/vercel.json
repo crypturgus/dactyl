@@ -1,6 +1,11 @@
 {
   "builds": [
     {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": { "distDir": "." }
+    },
+    {
       "src": "vercel_app/wsgi.py",
       "use": "@vercel/python"
     }
@@ -11,5 +16,6 @@
       "dest": "app/vercel_wsgi.py"
     }
   ],
-  "installCommand": "bash vercel_migrate.sh"
+    "devCommand": "python manage.py runserver"
+
 }
