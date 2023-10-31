@@ -5,6 +5,7 @@
     "run": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
     "start": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
     "dev": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
-    "prod": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application"
+    "prod": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
+    "serve": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application"
   }
 }
