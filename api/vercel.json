@@ -1,19 +1,15 @@
 {
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "." }
-    },
-    {
-      "src": "vercel_app/wsgi.py",
+      "src": "api/manage.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "app/vercel_wsgi.py"
+      "dest": "api/manage.py"
     }
-  ]
+  ],
+  "installCommand": "bash vercel_migrate.sh"
 }
