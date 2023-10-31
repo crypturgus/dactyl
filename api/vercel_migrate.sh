@@ -2,7 +2,8 @@
 set +x
 
 # 1. Install dependencies
-poetry install
+poetry config virtualenvs.create false \
+  && poetry install --no-interaction --no-ansi
 
 
 # 2. Apply Django migrations
