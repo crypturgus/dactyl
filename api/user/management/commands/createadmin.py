@@ -13,7 +13,7 @@ class Command(BaseCommand):
         password = os.environ['DJANGO_SUPERUSER_PASSWORD']
 
         try:
-            User.objects.create_superuser(username=username, email=email, password=password)
+            User.objects.create_superuser(display_name=username, email=email, password=password)
             self.stdout.write(self.style.SUCCESS('Superuser created.'))
         except IntegrityError:
             self.stdout.write(self.style.WARNING('Superuser already exists.'))
