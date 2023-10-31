@@ -1,0 +1,27 @@
+{
+  "builds": [
+    {
+      "src": "vite.config.ts",
+      "use": "@vitejs/plugin-legacy",
+      "config": {
+        "optimizeDeps": {
+          "include": ["react", "react-dom"]
+        }
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*).js",
+      "dest": "/src/$1.js"
+    },
+    {
+      "src": "/(.*).css",
+      "dest": "/src/$1.css"
+    },
+    {
+      "src": "/.*",
+      "dest": "index.html"
+    }
+  ]
+}
