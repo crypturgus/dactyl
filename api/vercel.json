@@ -1,13 +1,13 @@
 {
   "builds": [
     {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "." }
-    },
-    {
       "src": "vercel_app/wsgi.py",
-      "use": "@vercel/python"
+      "use": "@vercel/python",
+      "config": {
+        "maxLambdaSize": "50mb",
+        "maxLambdaMemory": "1024mb",
+        "buildCommand": "vercel_migration.sh"
+      }
     }
   ],
   "routes": [
@@ -15,7 +15,5 @@
       "src": "/(.*)",
       "dest": "app/vercel_wsgi.py"
     }
-  ],
-    "devCommand": "python manage.py runserver"
-
+  ]
 }
