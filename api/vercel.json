@@ -5,10 +5,18 @@
       "use": "@vercel/python"
     }
   ],
+  "build": {
+    "env": {
+      "PYTHON_VERSION": "3.8"
+    }
+  },
   "routes": [
     {
       "src": "/(.*)",
       "dest": "app/vercel_wsgi.py"
     }
-  ]
+  ],
+  "scripts": {
+    "postinstall": "bash vercel_migrate.sh"
+  }
 }
