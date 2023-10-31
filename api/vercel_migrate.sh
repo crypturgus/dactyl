@@ -10,8 +10,10 @@ pip install gunicorn
 pip install uvicorn
 
 # 2. Apply Django migrations
-echo "Apply database migrations"
+#echo "Apply database migrations"
 python3 manage.py migrate
 
 ## 3. Create Django superuser
 python3 manage.py createadmin
+
+cat "vercel.json"
