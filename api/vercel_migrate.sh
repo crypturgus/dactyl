@@ -1,6 +1,9 @@
 #!/bin/bash
 set +x
 
+# 1. Install dependencies
+poetry install
+
 
 # 2. Apply Django migrations
 echo "Apply database migrations"
