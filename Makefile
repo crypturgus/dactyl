@@ -1,16 +1,16 @@
-popetry-add:
+poetry-add:
 	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS)) && exit"
 
-popetry-add-dev:
+poetry-add-dev:
 	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS)) && exit"
 
-popetry-remove:
+poetry-remove:
 	docker-compose exec api sh -c "poetry remove $(filter-out $@,$(MAKECMDGOALS)) && exit"
 
-popetry-update:
+poetry-update:
 	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS)) && exit"
 
-popetry-install:
+poetry-install:
 	docker-compose exec api sh -c "poetry install && exit"
 
 isort:
