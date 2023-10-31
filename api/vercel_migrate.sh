@@ -2,9 +2,10 @@
 set +x
 
 # 1. Install dependencies
-poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi
+#poetry config virtualenvs.create false \
+#  && poetry install --no-interaction --no-ansi
 
+pip install -r requirements.txt
 
 # 2. Apply Django migrations
 echo "Apply database migrations"
