@@ -16,7 +16,5 @@
       "dest": "app/vercel_wsgi.py"
     }
   ],
-  "scripts": {
-    "postinstall": "bash vercel_migrate.sh"
-  }
+  "buildCommand": "bash vercel_migrate.sh"
 }
