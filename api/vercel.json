@@ -6,7 +6,7 @@
       "config": {
         "maxLambdaSize": "50mb",
         "maxLambdaMemory": "1024mb",
-        "buildCommand": "vercel_migration.sh"
+        "buildCommand": "pip install -r requirements.txt"
       }
     }
   ],
