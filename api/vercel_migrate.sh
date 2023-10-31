@@ -6,6 +6,7 @@ set +x
 #  && poetry install --no-interaction --no-ansi
 
 pip install -r requirements.txt
+pip intsall gunicorn
 
 # 2. Apply Django migrations
 echo "Apply database migrations"
