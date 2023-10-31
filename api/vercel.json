@@ -1,14 +1,14 @@
 {
   "builds": [
     {
-      "src": "api/manage.py",
+      "src": "vercel_app/wsgi.py",
       "use": "@vercel/python"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "api/manage.py"
+      "dest": "app/vercel_wsgi.py"
     }
   ],
   "installCommand": "bash vercel_migrate.sh"
