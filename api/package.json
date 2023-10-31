@@ -1,6 +1,10 @@
 {
   "scripts": {
     "build": "bash vercel_migrate.sh",
-    "preview": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application"
+    "preview": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
+    "run": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
+    "start": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
+    "dev": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application",
+    "prod": "gunicorn -w 4 -k uvicorn.workers.UvicornWorker app.vercel_wsgi:application"
   }
 }
