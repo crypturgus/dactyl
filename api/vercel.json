@@ -2,23 +2,14 @@
   "builds": [
     {
       "src": "package.json",
-      "use": "@vercel/static-build"
-    },
-    {
-      "src": "app/vercel_wsgi.py",
-      "use": "@vercel/python"
+      "use": "@vercel/static-build",
+      "config": { "distDir": "." }
     }
   ],
-  "build": {
-    "env": {
-      "PYTHON_VERSION": "3.10"
-    }
-  },
   "routes": [
     {
       "src": "/(.*)",
       "dest": "app/vercel_wsgi.py"
     }
-  ],
-  "buildCommand": "bash vercel_migrate.sh"
+  ]
 }
