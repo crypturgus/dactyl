@@ -1,11 +1,11 @@
 #!/bin/bash
 set +x
-pip install poetry
-# 1. Install dependencies
-poetry config virtualenvs.create false \
-  && poetry install --no-interaction --no-ansi
+#pip install poetry
+## 1. Install dependencies
+#poetry config virtualenvs.create false \
+#  && poetry install --no-interaction --no-ansi
 
-#pip install -r requirements.txt
+pip install -r requirements.txt
 #pip intsall gunicorn
 
 # 2. Apply Django migrations
