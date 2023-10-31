@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # 1. Wait for the database to be ready
-/tmp/wait-for-it.sh $POSTGRES_HOST:$POSTGRES_PORT --timeout=60 -- echo "Database is up"
+/tmp/wait-for-it.sh $POSTGRES_HOST:$POSTGRES_PORT --timeout=5 -- echo "Database is up"
 
 #until nc -z $POSTGRES_HOST $POSTGRES_PORT; do
 #    echo "$(date) - waiting for database to start"
