@@ -6,7 +6,7 @@ set +x
 #  && poetry install --no-interaction --no-ansi
 
 pip install -r requirements.txt
-pip intsall gunicorn
+pip install gunicorn
 pip install uvicorn
 
 # 2. Apply Django migrations
