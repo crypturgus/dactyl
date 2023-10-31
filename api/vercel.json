@@ -4,11 +4,18 @@
       "src": "vercel_app/wsgi.py",
       "use": "@vercel/python",
       "config": {
-        "maxLambdaSize": "50mb",
-        "maxLambdaMemory": "1024mb",
-        "buildCommand": "pip install -r requirements.txt"
+        "maxLambdaSize": "50mb"
       }
-    }
+    },
+
+    {
+        "src": "build_files.sh",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "staticfiles_build"
+        }}
+
+
   ],
   "routes": [
     {
