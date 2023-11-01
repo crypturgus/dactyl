@@ -9,6 +9,7 @@ function App() {
     <Wrapper>
       <BrowserRouter>
         <Routes>
+          <Route path={"/"} element={<>I'm up!</>} />
           <Route path={"/sign-in"} element={<SignIn />} />
           <Route path={"/sign-up"} element={<SignUp />} />
           <Route path={"/dashboard"} element={<Dashboard />} />
