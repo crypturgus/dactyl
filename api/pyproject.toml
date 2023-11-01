@@ -11,6 +11,8 @@ django = "^4.2.6"
 psycopg2-binary = "^2.9.9"
 strawberry-graphql = "^0.211.1"
 django-extensions = "^3.2.3"
+django-cors-headers = "^4.3.0"
+
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
