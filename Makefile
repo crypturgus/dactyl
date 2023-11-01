@@ -1,16 +1,28 @@
-popetry-add:
+poetry-add:
 	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS)) && exit"
-popetry-add-dev:
+
+poetry-add-dev:
 	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS)) && exit"
-popetry-remove:
+
+poetry-remove:
 	docker-compose exec api sh -c "poetry remove $(filter-out $@,$(MAKECMDGOALS)) && exit"
-popetry-update:
+
+poetry-update:
 	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS)) && exit"
-popetry-install:
+
+poetry-install:
 	docker-compose exec api sh -c "poetry install && exit"
+
 isort:
 	docker-compose exec api sh -c "isort . && exit"
+
 black:
 	docker-compose exec api sh -c "black . && exit"
+
 flake8:
 	docker-compose exec api sh -c "flake8 ."
+
+requirements:
+	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev && exit"
+
+lint: isort black flake8

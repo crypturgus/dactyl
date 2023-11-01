@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.9"
 django = "^4.2.6"
 psycopg2-binary = "^2.9.9"
+strawberry-graphql = "^0.211.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -20,9 +21,3 @@ strawberry-graphql = {extras = ["debug-server"], version = "^0.211.1"}
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
-[tool.flake8]
-ignore = "E501, W503"
-max-line-length = 120  # Set the maximum line length to 120 characters
-select = "B,C,E,F,W,T4,B9"
-exclude = "migrations"

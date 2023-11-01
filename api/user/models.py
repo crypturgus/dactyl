@@ -4,6 +4,7 @@ from django.db import models
 
 from user.managers import UserManager
 
+
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True)
     password = models.CharField(max_length=128)
