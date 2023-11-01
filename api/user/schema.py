@@ -3,12 +3,10 @@ from typing import List
 import strawberry
 from django.contrib.auth import get_user_model
 
+from user.services import register_user_service
+from user.strawberry_models import RegisterUserInput, RegisterUserPayload, User
+
 UserModel = get_user_model()
-
-
-@strawberry.type
-class User:
-    email: str
 
 
 @strawberry.type
@@ -18,4 +16,8 @@ class Query:
         return UserModel.objects.all()
 
 
-user_schema = strawberry.Schema(query=Query)
+@strawberry.type
+class Mutation:
+    @strawberry.mutation
+    def register_user(self, info, input: RegisterUserInput) -> RegisterUserPayload:
+        return register_user_service(input)

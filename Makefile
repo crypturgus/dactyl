@@ -1,6 +1,9 @@
+requirements:
+	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev && exit"
+
 poetry-add:
 	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS)) && exit"
-
+	@make requirements
 poetry-add-dev:
 	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS)) && exit"
 
@@ -21,8 +24,5 @@ black:
 
 flake8:
 	docker-compose exec api sh -c "flake8 ."
-
-requirements:
-	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev && exit"
 
 lint: isort black flake8

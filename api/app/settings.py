@@ -127,3 +127,9 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
+
+TOKEN_LIFESPAN = 3  # days
+
+MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY")
+MAILJET_SECRET = os.environ.get("MAILJET_SECRET")
+SEND_NOTIFICATIONS = MAILJET_SECRET and MAILJET_API_KEY
