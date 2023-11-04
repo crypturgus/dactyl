@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: make-isort
+        name: Isort
+        entry: make isort
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: make-flake8
+        name: Flake8
+        entry: make flake8
+        language: system
+        types: [ python ]
+        pass_filenames: false
+
+      - id: make-black
+        name: Black
+        entry: make black
+        language: system
+        types: [ python ]
+        pass_filenames: false

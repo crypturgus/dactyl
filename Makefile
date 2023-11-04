@@ -5,6 +5,7 @@ requirements:
 poetry-add:
 	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS))"
 	@make requirements
+
 poetry-add-dev:
 	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS))"
 
@@ -18,12 +19,15 @@ poetry-install:
 	docker-compose exec api sh -c "poetry install"
 
 isort:
-	docker-compose exec api sh -c "isort ."
+	docker-compose exec -T api sh -c "isort ."
 
 black:
-	docker-compose exec api sh -c "black ."
+	docker-compose exec -T api sh -c  "black ."
 
 flake8:
-	docker-compose exec api sh -c "flake8 ."
+	docker-compose exec -T api sh -c  "flake8 ."
 
 lint: isort black flake8
+
+precommit:
+	pre-commit install
