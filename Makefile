@@ -1,3 +1,4 @@
+# Notice this creates requirements file optimized for production so it won't include any dev deps, hence "--without dev" flag
 requirements:
 	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev"
 

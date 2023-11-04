@@ -113,3 +113,6 @@ $RECYCLE.BIN/
 
 # ASP.NET Scaffolding
 ScaffoldingReadMe.txt
+
+# MacOS files
+.DS_Store
