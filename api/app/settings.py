@@ -133,7 +133,7 @@ AUTH_USER_MODEL = "user.User"
 
 # CORS
 
-CORS_ORIGIN_WHITELIST = [
-    "http://localhost:5173",
-    "http://0.0.0.0:8085",
+CORS_ORIGIN_REGEX_WHITELIST = [
+    r'^http(s?)://localhost',
+    r'^http(s?)://(.*)\.dactyl',
 ]
