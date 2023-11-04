@@ -11,7 +11,6 @@ django = "^4.2.6"
 psycopg2-binary = "^2.9.9"
 strawberry-graphql = "^0.211.1"
 
-
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
 flake8 = "^6.1.0"

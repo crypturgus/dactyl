@@ -1,28 +1,28 @@
-poetry-add:
-	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS)) && exit"
+requirements:
+	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev"
 
+poetry-add:
+	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS))"
+	@make requirements
 poetry-add-dev:
-	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS)) && exit"
+	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS))"
 
 poetry-remove:
-	docker-compose exec api sh -c "poetry remove $(filter-out $@,$(MAKECMDGOALS)) && exit"
+	docker-compose exec api sh -c "poetry remove $(filter-out $@,$(MAKECMDGOALS))"
 
 poetry-update:
-	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS)) && exit"
+	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS))"
 
 poetry-install:
-	docker-compose exec api sh -c "poetry install && exit"
+	docker-compose exec api sh -c "poetry install"
 
 isort:
-	docker-compose exec api sh -c "isort . && exit"
+	docker-compose exec api sh -c "isort ."
 
 black:
-	docker-compose exec api sh -c "black . && exit"
+	docker-compose exec api sh -c "black ."
 
 flake8:
 	docker-compose exec api sh -c "flake8 ."
-
-requirements:
-	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev && exit"
 
 lint: isort black flake8
