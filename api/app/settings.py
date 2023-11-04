@@ -127,9 +127,3 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 AUTH_USER_MODEL = "user.User"
-
-
-# EMAIL_BACKEND = 'django_mailjet.backends.MailjetBackend'
-# MAILJET_API_KEY = os.environ.get("MAILJET_API_KEY")
-# MAILJET_API_SECRET = os.environ.get("MAILJET_API_SECRET")
-# FROM_EMAIL = os.environ.get("FROM_EMAIL")
