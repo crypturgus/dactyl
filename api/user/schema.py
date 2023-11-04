@@ -4,7 +4,7 @@ import strawberry
 from django.contrib.auth import get_user_model
 
 from user.services import register_user_service
-from user.strawberry_models import RegisterUserInput, RegisterUserPayload, User
+from user.strawberry_types import RegisterUserInput, RegisterUserPayload, User
 
 UserModel = get_user_model()
 

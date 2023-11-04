@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
-from user.strawberry_models import RegisterUserInput, RegisterUserPayload
+from user.strawberry_types import RegisterUserInput, RegisterUserPayload
 
 UserModel = get_user_model()
 
