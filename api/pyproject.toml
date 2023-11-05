@@ -13,6 +13,8 @@ strawberry-graphql = "^0.211.1"
 django-extensions = "^3.2.3"
 django-cors-headers = "^4.3.0"
 
+asyncio = "^3.4.3"
+pyppeteer = "^1.0.2"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.12.0"
