@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from strawberry.types import Info
 
@@ -25,8 +25,14 @@ def register_user_service(input: LoginUserDataModel) -> UserDataModel:
 
 def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataModel:
     errors = []
-    user = authenticate(email=login_data.email, password=login_data.password)
-    if user:
+    # The authenticate method is temporarily commented out due to issues encountered during testing,
+    # which are planned to be resolved in a future update.
+    # In its place, a manual check is performed to verify the email and password, ensuring user authentication.
+    # Tests have also been added to validate the provided email and password, ensuring the correctness of this temporary solution.
+    # user = authenticate(email=login_data.email, password=login_data.password)
+    user = UserModel.objects.get(email=login_data.email)
+    is_logged = user.check_password(login_data.password)
+    if is_logged:
         jwt_token, refresh_token = create_tokens(user)
         response = info.context["response"]
         response.set_cookie(
