@@ -137,3 +137,5 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     r'^http(s?)://localhost',
     r'^http(s?)://(.*)\.dactyl',
 ]
+REFRESH_TOKEN_EXPIRY_MINUTES = 30 * 24 * 60  # 30 days
+ACCESS_TOKEN_EXPIRY_MINUTES = 5

@@ -24,6 +24,8 @@ services:
       - db
     networks:
       - backend
+    stdin_open: true  # Keep stdin open for interactive debugging
+    tty: true         # Allocate a pseudo-TTY for interactive debugging
 
   ui:
     build:
@@ -34,7 +36,7 @@ services:
       # We don't want to copy local machine node_modules into docker space
       - /app/node_modules
     ports:
-      - "5173:5173"
+      - "5173:5432"
     depends_on:
       - api
 

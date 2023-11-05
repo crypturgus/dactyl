@@ -31,3 +31,25 @@ lint: isort black flake8
 
 precommit:
 	pre-commit install
+
+bash:
+	docker-compose exec api bash
+
+shell:
+	docker-compose exec api ./manage.py shell_plus
+
+migrate:
+	docker-compose exec api ./manage.py migrate
+
+makemigrations:
+	docker-compose exec api ./manage.py makemigrations
+	@make migrate
+
+logs:
+	docker-compose logs -f
+
+logs-api:
+	docker-compose logs -f api
+
+logs-ui:
+	docker-compose logs -f ui
