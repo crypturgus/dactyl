@@ -15,7 +15,7 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS("Started fetching data for NIP 6141548074"))
         
         async def main():
-            browser = await pyppeteer.connect(options = {"browserWSEndpoint": "ws://172.24.0.2:3000"})
+            browser = await pyppeteer.connect(options = {"browserWSEndpoint": "ws://browserless:3000"})
             page = await browser.newPage()
             await page.goto('https://aplikacja.ceidg.gov.pl/ceidg/ceidg.public.ui/search.aspx')
             

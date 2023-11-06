@@ -42,8 +42,9 @@ services:
     image: browserless/chrome:latest
     environment:
       - MAX_CONCURRENT_SESSIONS=10
+    profiles: ["on_demand"]
     ports:
-      - "3000:3000"
+      - "3008:3000"
     networks:
       - backend
 
