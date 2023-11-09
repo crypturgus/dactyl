@@ -22,9 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ["SECRET_KEY"]
+JWT_SECRET_KEY = os.environ["JWT_SECRET_KEY"]
+ACCESS_TOKEN_EXPIRY_DAYS = 30
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("DEBUG") == "True"
+USE_HTTPS = os.environ.get("USE_HTTPS") == "True"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS").split(",")
 
@@ -139,5 +142,4 @@ CORS_ORIGIN_REGEX_WHITELIST = [
     r'^http(s?)://localhost',
     r'^http(s?)://(.*)\.dactyl',
 ]
-REFRESH_TOKEN_EXPIRY_MINUTES = 30 * 24 * 60  # 30 days
 ACCESS_TOKEN_EXPIRY_MINUTES = 5

@@ -5,16 +5,10 @@ from django.contrib.auth import get_user_model
 from strawberry import BasePermission
 from strawberry.types import Info
 
-from app.exceptions import UserNotFoundError
 from user.data_models import LoginUserDataModel
-from user.services import (
-    get_user_service,
-    login_user_service,
-    refersh_token_service,
-    register_user_service,
-)
+from user.services import login_user_service, register_user_service
 from user.strawberry_types import LoginUserInput, RegisterUserInput, UserType
-from user.utils import get_decoded_token
+from user.utils import validate_and_decode_token
 
 UserModel = get_user_model()
 
@@ -23,8 +17,21 @@ class IsAuthenticated(BasePermission):
     message = "User is not authenticated"
 
     def has_permission(self, source: Any, info: Info, **kwargs) -> bool:
-        token = get_decoded_token(info, "accessToken")
+        sid = info.context.request.COOKIES.get("SuperSID")
+        token = self._extract_token(info.context.request.headers.get("Authorization"))
+        validate_and_decode_token(token)
+        try:
+            user = UserModel.objects.get(tokens__sid=sid, tokens__token=token)
+        except UserModel.DoesNotExist:
+            return False
+        else:
+            info.context.user = user
         return bool(token)
+
+    def _extract_token(self, auth_header: str) -> str:
+        parts = auth_header.split(" ")
+        if len(parts) == 2 and parts[0] == "Bearer":
+            return parts[1]
 
 
 def get_users() -> List[UserType]:
@@ -39,13 +46,7 @@ class Query:
 
     @strawberry.field(permission_classes=[IsAuthenticated])
     def user(self, info: Info) -> UserType:
-        decoded_token = get_decoded_token(info, "accessToken")
-
-        try:
-            data = get_user_service(decoded_token["user_id"])
-        except UserNotFoundError:
-            raise Exception("User not found")
-        return data.to_strawberry(UserType)
+        return info.context.user.to_strawberry(UserType)
 
 
 @strawberry.type
@@ -60,8 +61,4 @@ class Mutation:
     def login_user(self, info: Info, input: LoginUserInput) -> UserType:
         login_data = LoginUserDataModel(email=input.email, password=input.password)
         user = login_user_service(info, login_data)
-        return user.to_strawberry(UserType)
-    @strawberry.mutation
-    def refresh_token(self, info: Info) -> UserType:
-        user = refersh_token_service(info)
         return user.to_strawberry(UserType)

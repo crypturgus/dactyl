@@ -1,10 +1,11 @@
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from strawberry.types import Info
 
 from app.exceptions import UserNotFoundError
 from user.data_models import LoginUserDataModel, UserDataModel
-from user.utils import create_tokens, get_decoded_token
+from user.utils import create_tokens
 
 UserModel = get_user_model()
 
@@ -33,51 +34,19 @@ def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataMo
     user = UserModel.objects.get(email=login_data.email)
     is_logged = user.check_password(login_data.password)
     if is_logged:
-        jwt_token, refresh_token = create_tokens(user)
+        jwt_token, sid = create_tokens(user)
         response = info.context["response"]
         response.set_cookie(
-            key="accessToken",
-            value=jwt_token,
+            key="SuperSID",
+            value=sid,
             httponly=True,
-            secure=False,  # Set to False if not using HTTPS
+            secure=settings.USE_HTTPS,  # Set to False if not using HTTPS
             samesite="Strict",
         )
-        response.set_cookie(
-            key="refreshToken",
-            value=refresh_token,
-            httponly=True,
-            secure=False,  # Set to False if not using HTTPS
-            samesite="Strict",
-        )
+        response.headers["Authorization"] = f"Bearer {jwt_token}"
         return UserDataModel.model_validate(user)
     errors.extend(["Invalid email or password"])
     raise Exception("Authentication failed")
-
-
-def refersh_token_service(info: Info):
-    token_payload = get_decoded_token(info, "refreshToken")
-    user_id = token_payload["user_id"]
-    try:
-        logged_user = UserModel.objects.get(id=user_id)
-    except UserModel.DoesNotExist:
-        raise UserNotFoundError()
-    jwt_token, refresh_token = create_tokens(logged_user)
-    response = info.context["response"]
-    response.set_cookie(
-        key="accessToken",
-        value=jwt_token,
-        httponly=True,
-        secure=False,  # Set to False if not using HTTPS
-        samesite="Strict",
-    )
-    response.set_cookie(
-        key="refreshToken",
-        value=refresh_token,
-        httponly=True,
-        secure=False,  # Set to False if not using HTTPS
-        samesite="Strict",
-    )
-    return UserDataModel.model_validate(logged_user)
 
 
 def get_user_service(user_id: int) -> UserDataModel:

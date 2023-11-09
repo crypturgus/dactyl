@@ -80,6 +80,8 @@ def test_login_user_returns_200(user):
 
     assert response.status_code == 200
     assert response.json()["data"]["loginUser"]["email"] == "testuser@testuser.xd"
-
-    assert response.cookies["accessToken"] is not None
-    assert response.cookies["refreshToken"] is not None
+    token = response.headers["Authorization"].split(" ")[1]
+    user = UserModel.objects.get(
+        tokens__token=token, tokens__sid=response.cookies["SuperSID"].value
+    )
+    assert user.email == "testuser@testuser.xd"
