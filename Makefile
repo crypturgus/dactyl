@@ -79,3 +79,9 @@ rmvolumes:
 	docker volume ls --filter "name=dactyl" --format "{{.Name}}" | xargs -r docker volume rm
 
 make cleanup-dockers: stop rmdocker rmimages rmvolumes
+
+build-api:
+	docker-compose build api
+
+restart-api:
+	docker-compose restart api
