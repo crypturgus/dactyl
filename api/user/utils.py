@@ -30,7 +30,7 @@ def create_tokens(user: UserModel) -> tuple[str, UUID]:
 
 def validate_and_decode_token(token: str) -> dict:
     try:
-        decoded_token = jwt.decode(token, settings.SECRET_KEY, algorithms=["HS256"])
+        decoded_token = jwt.decode(token, settings.JWT_SECRET_KEY, algorithms=["HS256"])
     except Exception as e:
         raise e
     return decoded_token
