@@ -4,8 +4,9 @@ from django.test import Client
 
 UserModel = get_user_model()
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db
+
 def test_some_query(user):
     client = Client()
 
@@ -26,7 +27,6 @@ def test_some_query(user):
     assert json_response["data"]["users"][0]["email"] == "testuser@testuser.xd"
 
 
-@pytest.mark.django_db
 def test_register_user_returns_200():
     client = Client()
 
@@ -45,7 +45,6 @@ def test_register_user_returns_200():
     assert response.json()["data"]["registerUser"]["email"] == "new@user.xd"
 
 
-@pytest.mark.django_db
 def test_register_user_creates_active_user():
     client = Client()
 
@@ -63,7 +62,6 @@ def test_register_user_creates_active_user():
     assert user.check_password("xDpassword") is True
 
 
-@pytest.mark.django_db
 def test_login_user_returns_200(user):
     client = Client()
 

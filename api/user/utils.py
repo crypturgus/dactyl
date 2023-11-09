@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 from uuid import UUID, uuid4
 
 import jwt
@@ -11,21 +11,21 @@ from user.models import AccessToken
 UserModel = get_user_model()
 
 
-def create_token(expiry_days: int, user_id: int) -> str:
+def create_token(expiry_days: int, user_id: int) -> (str, datetime):
     expiration_date = timezone.now() + timedelta(days=expiry_days)
     token = jwt.encode(
         {"user_id": user_id, "exp": expiration_date},
         settings.SECRET_KEY,
         algorithm="HS256",
     )
-    return token
+    return token, expiration_date
 
 
-def create_tokens(user: UserModel) -> tuple[str, UUID]:
-    jwt_token = create_token(settings.ACCESS_TOKEN_EXPIRY_DAYS, user.id)
+def create_access_token(user: UserModel) -> tuple[str, UUID, datetime]:
+    jwt_token, exp_datetime = create_token(settings.ACCESS_TOKEN_EXPIRY_DAYS, user.id)
     sid = uuid4()
     AccessToken.objects.create(user=user, token=jwt_token, sid=sid)
-    return jwt_token, sid
+    return jwt_token, sid, exp_datetime
 
 
 def validate_and_decode_token(token: str) -> dict:

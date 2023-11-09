@@ -64,7 +64,7 @@ test-debug:
 	docker-compose exec api pytest tests/ -s $(filter)
 
 run-tests:
-	docker-compose exec api pytest tests/ -
+	docker-compose exec api pytest tests/
 
 stop:
 	docker ps -a --filter "name=dactyl" --format "{{.ID}}" | xargs -r docker stop

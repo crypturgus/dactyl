@@ -3,9 +3,9 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from strawberry.types import Info
 
-from app.exceptions import UserNotFoundError
+from app.exceptions import NotAuthenticatedError, UserNotFoundError
 from user.data_models import LoginUserDataModel, UserDataModel
-from user.utils import create_tokens
+from user.utils import create_access_token
 
 UserModel = get_user_model()
 
@@ -25,16 +25,18 @@ def register_user_service(input: LoginUserDataModel) -> UserDataModel:
 
 
 def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataModel:
-    errors = []
     # The authenticate method is temporarily commented out due to issues encountered during testing,
     # which are planned to be resolved in a future update.
     # In its place, a manual check is performed to verify the email and password, ensuring user authentication.
     # Tests have also been added to validate the provided email and password, ensuring the correctness of this temporary solution.
     # user = authenticate(email=login_data.email, password=login_data.password)
-    user = UserModel.objects.get(email=login_data.email)
+    try:
+        user = UserModel.objects.get(email=login_data.email)
+    except UserModel.DoesNotExist:
+        raise UserNotFoundError()
     is_logged = user.check_password(login_data.password)
     if is_logged:
-        jwt_token, sid = create_tokens(user)
+        jwt_token, sid, exp_datetime = create_access_token(user)
         response = info.context["response"]
         response.set_cookie(
             key="SuperSID",
@@ -42,16 +44,16 @@ def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataMo
             httponly=True,
             secure=settings.USE_HTTPS,  # Set to False if not using HTTPS
             samesite="Strict",
+            expires=exp_datetime.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
         )
         response.headers["Authorization"] = f"Bearer {jwt_token}"
         return UserDataModel.model_validate(user)
-    errors.extend(["Invalid email or password"])
-    raise Exception("Authentication failed")
+    raise NotAuthenticatedError()
 
 
-def get_user_service(user_id: int) -> UserDataModel:
-    try:
-        logged_user = UserModel.objects.get(id=user_id)
-    except UserModel.DoesNotExist:
-        raise UserNotFoundError()
-    return UserDataModel.model_validate(logged_user)
+# def get_user_service(user_id: int) -> UserDataModel:
+#     try:
+#         logged_user = UserModel.objects.get(id=user_id)
+#     except UserModel.DoesNotExist:
+#         raise UserNotFoundError()
+#     return UserDataModel.model_validate(logged_user)

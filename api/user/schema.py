@@ -5,6 +5,11 @@ from django.contrib.auth import get_user_model
 from strawberry import BasePermission
 from strawberry.types import Info
 
+from app.exceptions import (
+    NotAuthenticatedError,
+    SomethingWentWrongError,
+    UserNotFoundError,
+)
 from user.data_models import LoginUserDataModel
 from user.services import login_user_service, register_user_service
 from user.strawberry_types import LoginUserInput, RegisterUserInput, UserType
@@ -54,11 +59,17 @@ class Mutation:
     @strawberry.mutation
     def register_user(self, info: Info, input: RegisterUserInput) -> UserType:
         login_data = LoginUserDataModel(email=input.email, password=input.password)
-        user = register_user_service(login_data)
+        try:
+            user = register_user_service(login_data)
+        except Exception:
+            raise SomethingWentWrongError()
         return user.to_strawberry(UserType)
 
     @strawberry.mutation
     def login_user(self, info: Info, input: LoginUserInput) -> UserType:
         login_data = LoginUserDataModel(email=input.email, password=input.password)
-        user = login_user_service(info, login_data)
+        try:
+            user = login_user_service(info, login_data)
+        except (NotAuthenticatedError, UserNotFoundError):
+            raise SomethingWentWrongError()
         return user.to_strawberry(UserType)
