@@ -3,11 +3,11 @@ requirements:
 	docker-compose run api sh -c "poetry export --format requirements.txt --output requirements.txt --without-hashes --without dev"
 
 poetry-add:
-	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS)) --no-root"
+	docker-compose exec api sh -c "poetry add $(filter-out $@,$(MAKECMDGOALS))"
 	@make requirements
 
 poetry-add-dev:
-	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS)) --no-root"
+	docker-compose exec api sh -c "poetry add --dev $(filter-out $@,$(MAKECMDGOALS))"
 
 poetry-remove:
 	docker-compose exec api sh -c "poetry remove $(filter-out $@,$(MAKECMDGOALS))"

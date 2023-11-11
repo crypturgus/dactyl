@@ -23,4 +23,5 @@ from app.schema import root_schema
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("graphql/v1/", GraphQLView.as_view(schema=root_schema), name="graphql"),
+    path("", GraphQLView.as_view(schema=root_schema), name="graphql"),
 ]
