@@ -12,6 +12,8 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { LOGIN } from "./queries";
+import { signIn } from "../../authHandlers";
+import { SIGN_UP_PATH } from "../../constants";
 
 export const SignIn = () => {
   const [email, setEmail] = React.useState("");
@@ -22,8 +24,7 @@ export const SignIn = () => {
 
   const [login, { loading, error }] = useMutation(LOGIN, {
     onCompleted: (data) => {
-      localStorage.setItem("auth-token", data.loginUser.token);
-      navigate("/dashboard");
+      signIn(data.loginUser.token, navigate);
     },
     onError: (error) => {
       console.log("Error: ", error);
@@ -130,7 +131,7 @@ export const SignIn = () => {
           >
             Sign In
           </Button>
-          <Link href="/sign-up" variant="body2">
+          <Link href={SIGN_UP_PATH} variant="body2">
             {"Don't have an account? Sign Up"}
           </Link>
         </Box>
