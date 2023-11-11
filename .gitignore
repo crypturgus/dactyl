@@ -116,3 +116,5 @@ ScaffoldingReadMe.txt
 
 # MacOS files
 .DS_Store
+
+*certbot/*
