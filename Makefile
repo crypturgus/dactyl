@@ -15,7 +15,7 @@ poetry-remove:
 
 
 poetry-update:
-	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS)) --no-root"
+	docker-compose exec api sh -c "poetry update $(filter-out $@,$(MAKECMDGOALS))"
 	@make requirements
 
 poetry-install:
