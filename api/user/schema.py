@@ -1,3 +1,4 @@
+import logging
 from typing import Any, List
 
 import strawberry
@@ -21,6 +22,8 @@ from user.strawberry_types import (
 from user.utils import validate_and_decode_token
 
 UserModel = get_user_model()
+
+logger = logging.getLogger(__name__)
 
 
 class IsAuthenticated(BasePermission):
@@ -63,11 +66,14 @@ class Query:
 class Mutation:
     @strawberry.mutation
     def register_user(self, info: Info, input: RegisterUserInput) -> UserType:
+        logger.info("Registering user status=started")
         login_data = LoginUserDataModel(email=input.email, password=input.password)
         try:
             user = register_user_service(login_data)
-        except Exception:
+        except Exception as e:
+            logger.exception("Error while registering user: %s", e)
             raise SomethingWentWrongError()
+        logger.info("Registering user status=finished")
         return user.to_strawberry(UserType)
 
     @strawberry.mutation
