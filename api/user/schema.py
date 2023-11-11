@@ -12,7 +12,12 @@ from app.exceptions import (
 )
 from user.data_models import LoginUserDataModel
 from user.services import login_user_service, register_user_service
-from user.strawberry_types import LoginUserInput, RegisterUserInput, UserType
+from user.strawberry_types import (
+    LoggedUserType,
+    LoginUserInput,
+    RegisterUserInput,
+    UserType,
+)
 from user.utils import validate_and_decode_token
 
 UserModel = get_user_model()
@@ -66,10 +71,10 @@ class Mutation:
         return user.to_strawberry(UserType)
 
     @strawberry.mutation
-    def login_user(self, info: Info, input: LoginUserInput) -> UserType:
+    def login_user(self, info: Info, input: LoginUserInput) -> LoggedUserType:
         login_data = LoginUserDataModel(email=input.email, password=input.password)
         try:
-            user = login_user_service(info, login_data)
+            data = login_user_service(info, login_data)
         except (NotAuthenticatedError, UserNotFoundError):
             raise SomethingWentWrongError()
-        return user.to_strawberry(UserType)
+        return LoggedUserType(user=data.user.to_strawberry(UserType), token=data.token)

@@ -26,7 +26,7 @@ class DactylBaseDataModel(BaseModel):
 
 class UserDataModel(DactylBaseDataModel):
     email: str = Field(..., example="username")
-    password: str = Field(..., example="password")
+    display_name: str = Field(..., example="password")
 
 
 class LoginUserDataModel(DactylBaseDataModel):
@@ -37,3 +37,8 @@ class LoginUserDataModel(DactylBaseDataModel):
 class UserPayloadDataModel(DactylBaseDataModel):
     user: Optional[UserDataModel] = None
     errors: List[str] = []
+
+
+class LoggedUserDataModel(DactylBaseDataModel):
+    user: UserDataModel
+    token: str

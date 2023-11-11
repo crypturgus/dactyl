@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from strawberry.types import Info
 
 from app.exceptions import NotAuthenticatedError, UserNotFoundError
-from user.data_models import LoginUserDataModel, UserDataModel
+from user.data_models import LoggedUserDataModel, LoginUserDataModel, UserDataModel
 from user.utils import create_access_token
 
 UserModel = get_user_model()
@@ -24,7 +24,9 @@ def register_user_service(input: LoginUserDataModel) -> UserDataModel:
     return UserDataModel.model_validate(user)
 
 
-def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataModel:
+def login_user_service(
+    info: Info, login_data: LoginUserDataModel
+) -> LoggedUserDataModel:
     # The authenticate method is temporarily commented out due to issues encountered during testing,
     # which are planned to be resolved in a future update.
     # In its place, a manual check is performed to verify the email and password, ensuring user authentication.
@@ -47,7 +49,9 @@ def login_user_service(info: Info, login_data: LoginUserDataModel) -> UserDataMo
             expires=exp_datetime.strftime("%a, %d-%b-%Y %H:%M:%S GMT"),
         )
         response.headers["Authorization"] = f"Bearer {jwt_token}"
-        return UserDataModel.model_validate(user)
+        user_data_model = UserDataModel.model_validate(user)
+        return LoggedUserDataModel(user=user_data_model, token=jwt_token)
+
     raise NotAuthenticatedError()
 
 

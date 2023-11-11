@@ -4,6 +4,13 @@ import strawberry
 @strawberry.type
 class UserType:
     email: str
+    display_name: str
+
+
+@strawberry.type
+class LoggedUserType:
+    user: UserType
+    token: str
 
 
 @strawberry.input

@@ -139,7 +139,7 @@ AUTH_USER_MODEL = "user.User"
 # CORS
 
 CORS_ORIGIN_REGEX_WHITELIST = [
-    r'^http(s?)://localhost',
-    r'^http(s?)://(.*)\.dactyl',
+    r"^http(s?)://localhost",
+    r"^http(s?)://(.*)\.dactyl",
 ]
 ACCESS_TOKEN_EXPIRY_MINUTES = 5
