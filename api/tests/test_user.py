@@ -68,7 +68,11 @@ def test_login_user_returns_200(user):
     query = """
     mutation {
     loginUser(input: { email: "testuser@testuser.xd", password: "testpass" }) {
-        email
+        user {
+            email,
+            displayName
+        },
+        token
         }
     }
     """
@@ -77,7 +81,9 @@ def test_login_user_returns_200(user):
     )
 
     assert response.status_code == 200
-    assert response.json()["data"]["loginUser"]["email"] == "testuser@testuser.xd"
+    assert (
+        response.json()["data"]["loginUser"]["user"]["email"] == "testuser@testuser.xd"
+    )
     token = response.headers["Authorization"].split(" ")[1]
     user = UserModel.objects.get(
         tokens__token=token, tokens__sid=response.cookies["SuperSID"].value
