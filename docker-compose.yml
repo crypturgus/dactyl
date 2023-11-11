@@ -8,6 +8,8 @@ services:
       - db_data:/var/lib/postgresql/data
     networks:
       - backend
+    ports:
+      - "7878:5432"
 
   api:
     build:
@@ -24,6 +26,8 @@ services:
       - db
     networks:
       - backend
+    stdin_open: true  # Keep stdin open for interactive debugging
+    tty: true         # Allocate a pseudo-TTY for interactive debugging
 
   ui:
     build:

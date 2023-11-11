@@ -2,18 +2,30 @@ import strawberry
 
 
 @strawberry.type
-class User:
+class UserType:
     email: str
+    display_name: str
+
+
+@strawberry.type
+class LoggedUserType:
+    user: UserType
+    token: str
 
 
 @strawberry.input
 class RegisterUserInput:
-    username: str
     password: str
     email: str
 
 
 @strawberry.type
-class RegisterUserPayload:
-    user: User
+class UserPayloadType:
+    user: UserType
     errors: list[str]
+
+
+@strawberry.input
+class LoginUserInput:
+    email: str
+    password: str
