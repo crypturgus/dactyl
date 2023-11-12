@@ -1,5 +1,4 @@
-# Start with a smaller base image
-FROM python:3.11-bookworm as builder
+FROM python:3.11-bookworm
 
 # Set environment variables to reduce Python buffering and ensure Python doesn’t create .pyc files
 ENV PYTHONDONTWRITEBYTECODE 1
@@ -22,25 +21,9 @@ COPY ./api/poetry.lock ./
 # Install project dependencies
 RUN poetry config virtualenvs.create false && \
     poetry install --no-dev --no-interaction --no-ansi
-#RUN which gunicorn
-COPY api /app/
-# Start a new stage from a smaller base image
-#FROM python:3.11-bookworm
-#
-## Set work directory
-#WORKDIR /app
-#
-## Copy installed dependencies from the builder stage
-#COPY --from=builder /app /app
-#COPY --from=builder /root/.cache /root/.cache
-#
-## Copy the application code
-#COPY api /app/
-#
-## Copy the wait-for-it and entrypoint scripts
-#RUN which gunicorn
 
-# Expose the port the app runs on
+COPY api /app/
+
 EXPOSE 8000
 
 # Command to run the application
