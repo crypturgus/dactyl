@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - '**'
-    paths-ignore:
-      - '**' # Ignore all paths to not trigger on push
-  pull_request:
-    branches:
-      - master
+#    paths-ignore:
+#      - '**' # Ignore all paths to not trigger on push
+#  pull_request:
+#    branches:
+#      - master
 
 jobs:
   lint:
@@ -114,10 +114,10 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     needs: [ lint, test ]
-    if: github.ref == 'refs/heads/master'
-    env:
-      EC2_HOST: "ec2-18-159-112-49.eu-central-1.compute.amazonaws.com"
-      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
+#    if: github.ref == 'refs/heads/master'
+#    env:
+#      EC2_HOST: "ec2-18-159-112-49.eu-central-1.compute.amazonaws.com"
+#      EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Deploy to EC2
@@ -143,7 +143,8 @@ jobs:
             chmod +x build.sh
             chmod +x ./scripts/reload-certs.sh
             ./build.sh
+            echo "Deployed to EC2 instance" > deploy.txt
           '
 
-        env:
-          EC2_HOST: "ec2-18-159-112-49.eu-central-1.compute.amazonaws.com"
+#        env:
+#          EC2_HOST: "ec2-18-159-112-49.eu-central-1.compute.amazonaws.com"
