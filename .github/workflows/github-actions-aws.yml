@@ -139,7 +139,7 @@ jobs:
             echo "Deploying to EC2 instance..."
             cd /home/ec2-user/dactyl
             git fetch --all
-            git reset --hard origin/master
+            git reset --hard origin/DAC-2-github-acions-and-aws-deploy
             chmod +x build.sh
             chmod +x ./scripts/reload-certs.sh
             ./build.sh
