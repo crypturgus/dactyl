@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  django:
+    build:
+      context: .
+      dockerfile: dockers/api/Dockerfile.aws
+    command: gunicorn app.wsgi:application --bind 0.0.0.0:8000
+    expose:
+      - 8000
+    ports:
+      - "8000:8000"
+    env_file:
+      - /home/ec2-user/.env
+    # Environment variables and other configurations
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./dockers/api/Dockerfile-nginx.aws
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./certbot/www:/var/www/certbot/
+      - ./certbot/conf/:/etc/nginx/ssl/
+  certbot:
+    image: certbot/certbot
+    profiles: ["on_demand"]
+    volumes:
+      - ./certbot/www/:/var/www/certbot/
+      - ./certbot/conf/:/etc/letsencrypt/
