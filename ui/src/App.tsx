@@ -1,32 +1,23 @@
-import { useQuery, gql } from "@apollo/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import styled from "styled-components";
+import { PrivateRoute } from "./components/PrivateRoute";
 import { Dashboard } from "./pages/Dashboard";
 import { SignIn } from "./pages/SignIn";
 import { SignUp } from "./pages/SignUp";
-
-const GET_USERS = gql`
-  query {
-    users {
-      email
-    }
-  }
-`;
+import { Welcome } from "./pages/Welcome";
+import { DASHBOARD_PATH, ROOT_PATH, SIGN_IN_PATH, SIGN_UP_PATH } from "./constants";
 
 function App() {
-  const { loading, error, data } = useQuery(GET_USERS);
-
   return (
     <Wrapper>
       <BrowserRouter>
         <Routes>
-          <Route
-            path={"/"}
-            element={loading ? <>loading</> : error ? <>error</> : <>Our users are: {JSON.stringify(data.users)}</>}
-          />
-          <Route path={"/sign-in"} element={<SignIn />} />
-          <Route path={"/sign-up"} element={<SignUp />} />
-          <Route path={"/dashboard"} element={<Dashboard />} />
+          <Route path={ROOT_PATH} element={<PrivateRoute />}>
+            <Route index element={<Welcome />} />
+            <Route path={DASHBOARD_PATH} element={<Dashboard />} />
+          </Route>
+          <Route path={SIGN_IN_PATH} element={<SignIn />} />
+          <Route path={SIGN_UP_PATH} element={<SignUp />} />
         </Routes>
       </BrowserRouter>
     </Wrapper>

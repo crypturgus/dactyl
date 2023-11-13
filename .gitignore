@@ -5,6 +5,7 @@ __pycache__/
 db.sqlite3
 *.sqlite3
 .env
+.env.local
 *.pot
 *.egg-info/
 dist/
