@@ -113,7 +113,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/master2'
+    if: github.event.pull_request.merged == true
     needs: [ lint, test ]
     steps:
       - uses: actions/checkout@v3
