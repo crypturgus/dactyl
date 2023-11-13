@@ -4,11 +4,11 @@ on:
   push:
     branches:
       - '**'
-#    paths-ignore:
-#      - '**' # Ignore all paths to not trigger on push
-#  pull_request:
-#    branches:
-#      - master
+    paths-ignore:
+      - '**' # Ignore all paths to not trigger on push
+  pull_request:
+    branches:
+      - master2
 
 jobs:
   lint:
@@ -113,7 +113,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-#    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master2'
     needs: [ lint, test ]
     steps:
       - uses: actions/checkout@v3
@@ -136,7 +136,7 @@ jobs:
             echo "Deploying to EC2 instance..."
             cd /home/ec2-user/dactyl
             git fetch --all
-            git reset --hard origin/test-deploy
+            git reset --hard origin/master2
             chmod +x ./scripts/build.aws.sh
             chmod +x ./scripts/reload-certs.sh
             ./scripts/build.aws.sh
