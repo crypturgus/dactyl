@@ -7,8 +7,7 @@ import GlobalStyle from "./GlobalStyles";
 import { getAuthToken } from "./authHandlers";
 
 const httpLink = createHttpLink({
-  // TODO: Move to env var
-  uri: "http://localhost:8085/graphql/v1/",
+  uri: import.meta.env.VITE_API_SERVICE,
 });
 
 const authLink = setContext((_, { headers }) => {
