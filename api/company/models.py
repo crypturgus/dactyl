@@ -1,12 +1,12 @@
-from django.conf import settings
 from django.db import models
 
 # TODO: django-countries?
 COUNTRY_CHOICES = [
     ("PL", "Poland"),
-    ("US", "United States"),
+    ("CZ", "Czech Republic"),
     ("UK", "United Kingdom"),
     ("DE", "Germany"),
+    ("US", "United States"),
     ("FR", "France"),
 ]
 
@@ -30,14 +30,18 @@ class Company(models.Model):
 
 
 class UserCompany(Company):
-    # TODO: Link it to UserProfile when there
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL,
+    user_profile = models.OneToOneField(
+        "user.UserProfile",
         on_delete=models.CASCADE,
         related_name="company",
-        help_text="The user that this company is associated with.",
+        help_text="The user profile that this company is associated with.",
     )
 
 
 class Counterparty(Company):
-    pass
+    user_profile = models.ForeignKey(
+        "user.UserProfile",
+        on_delete=models.CASCADE,
+        related_name="counterparties",
+        help_text="The user profile associated with this counterparty.",
+    )
