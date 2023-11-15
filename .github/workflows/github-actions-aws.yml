@@ -8,7 +8,7 @@ on:
       - '**' # Ignore all paths to not trigger on push
   pull_request:
     branches:
-      - master2
+      - master
 
 jobs:
   lint:
@@ -40,7 +40,7 @@ jobs:
         run: poetry run black --check .
         working-directory: ./api
 
-  test:
+  check-migrations:
     runs-on: ubuntu-latest
     env:
       POSTGRES_DB: "postgres"
@@ -78,6 +78,77 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies with Poetry
+        run: |
+          pip install poetry
+          poetry install
+        working-directory: ./api
+
+      - name: Wait for PostgreSQL
+        run: |
+          until pg_isready -h localhost -p 5432; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+      - name:  Check for missing migrations
+        run: poetry run python manage.py makemigrations --check --dry-run
+        working-directory: ./api
+        env:
+          TEST_POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          TEST_POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          TEST_POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          TEST_POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          TEST_POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          POSTGRES_HOST_AUTH_METHOD: ${{ env.POSTGRES_HOST_AUTH_METHOD }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
+          USE_HTTPS: ${{ env.USE_HTTPS }}
+
+  test:
+    runs-on: ubuntu-latest
+    needs: [ check-migrations ]
+    env:
+      POSTGRES_DB: "postgres"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "postgres"
+      POSTGRES_HOST: "localhost"
+      POSTGRES_PORT: "5432"
+      ALLOWED_HOSTS: "*"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+      SECRET_KEY: "ghaSecretKey"
+      JWT_SECRET_KEY: "jwtSecretKey"
+      USE_HTTPS: "False"
+    services:
+      postgres:
+        image: postgres:16.0-alpine
+        env:
+          TEST_POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          TEST_POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          TEST_POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          TEST_POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          TEST_POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          POSTGRES_HOST_AUTH_METHOD: ${{ env.POSTGRES_HOST_AUTH_METHOD }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
+          USE_HTTPS: ${{ env.USE_HTTPS }}
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
       - name: Set up Python
         uses: actions/setup-python@v3
         with:
