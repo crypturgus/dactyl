@@ -42,4 +42,4 @@
       ansible.builtin.git:
         repo: "{{ repo_url }}"
         dest: "{{ repo_dir }}"
-        version: "test-deploy"
+        version: "master"
