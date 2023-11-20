@@ -1,6 +1,7 @@
 import { useApolloClient, useQuery, gql } from "@apollo/client";
 import { useNavigate } from "react-router";
 import Button from "@mui/material/Button";
+import { Layout } from "../../components/Layout";
 import { signOut } from "../../authHandlers";
 
 const GET_USERS = gql`
@@ -17,10 +18,15 @@ export function Welcome() {
   const client = useApolloClient();
   const navigate = useNavigate();
   return (
-    <>
-      Hi! you're logged in!{" "}
-      {loading ? <>loading</> : error ? <>error</> : <>Our users are: {JSON.stringify(data.users)}</>}
-      <Button onClick={() => signOut(client, navigate)}>Log out</Button>
-    </>
+    <Layout
+      pageTitle="Dashboard"
+      pageContent={
+        <>
+          Hi! you're logged in!{" "}
+          {loading ? <>loading</> : error ? <>error</> : <>Our users are: {JSON.stringify(data.users)}</>}
+          <Button onClick={() => signOut(client, navigate)}>Log out</Button>
+        </>
+      }
+    />
   );
 }
