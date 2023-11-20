@@ -1,14 +1,6 @@
 from django.db import models
 
-# TODO: django-countries?
-COUNTRY_CHOICES = [
-    ("PL", "Poland"),
-    ("CZ", "Czech Republic"),
-    ("UK", "United Kingdom"),
-    ("DE", "Germany"),
-    ("US", "United States"),
-    ("FR", "France"),
-]
+from app.constants import COUNTRY_CHOICES
 
 
 class Company(models.Model):

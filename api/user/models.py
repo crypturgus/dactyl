@@ -2,15 +2,9 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from app.constants import CURRENCY_CHOICES
 from app.models import DjangoModelMixin
 from user.managers import UserManager
-
-CURRENCY_CHOICES = [
-    ("PLN", "Polish Zloty"),
-    ("CZK", "Czech Koruna"),
-    ("EUR", "Euro"),
-    ("USD", "US Dollar"),
-]
 
 
 class User(AbstractBaseUser, PermissionsMixin, DjangoModelMixin):
