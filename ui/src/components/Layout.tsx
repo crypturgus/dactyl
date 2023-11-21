@@ -2,14 +2,10 @@ import React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
-import Drawer from "@mui/material/Drawer";
-import List from "@mui/material/List";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { mainListItems, secondaryListItems } from "./listItems";
+import { SideMenu } from "./SideMenu";
 
-const drawerWidth = 240;
 
 interface LayoutProps {
   pageContent: React.ReactNode;
@@ -27,20 +23,7 @@ export function Layout({ pageContent, pageTitle }: LayoutProps) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": { width: drawerWidth, boxSizing: "border-box" },
-        }}
-      >
-        <Toolbar />
-        <Divider />
-        <List>{mainListItems}</List>
-        <Divider />
-        <List>{secondaryListItems}</List>
-      </Drawer>
+      <SideMenu />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Toolbar />
         {pageContent}
