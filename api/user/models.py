@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import AbstractBaseUser
 from django.contrib.auth.models import PermissionsMixin
 from django.db import models
 
+from app.constants import CURRENCY_CHOICES
 from app.models import DjangoModelMixin
 from user.managers import UserManager
 
@@ -25,3 +26,19 @@ class AccessToken(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tokens")
     token = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name="profile",
+    )
+    created_at = models.DateTimeField(
+        auto_now_add=True,
+    )
+    default_currency = models.CharField(
+        max_length=3,
+        choices=CURRENCY_CHOICES,
+        default="PLN",
+    )
