@@ -19,7 +19,7 @@ export function Welcome() {
   const navigate = useNavigate();
   return (
     <Layout
-      pageTitle="Dashboard"
+      pageTitle="Welcome"
       pageContent={
         <>
           Hi! you're logged in!{" "}
