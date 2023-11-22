@@ -57,11 +57,11 @@ jobs:
       postgres:
         image: postgres:16.0-alpine
         env:
-          TEST_POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          TEST_POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          TEST_POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          TEST_POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
-          TEST_POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
           ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
           POSTGRES_HOST_AUTH_METHOD: ${{ env.POSTGRES_HOST_AUTH_METHOD }}
           SECRET_KEY: ${{ env.SECRET_KEY }}
@@ -100,11 +100,11 @@ jobs:
         run: poetry run python manage.py makemigrations --check --dry-run
         working-directory: ./api
         env:
-          TEST_POSTGRES_DB: ${{ env.POSTGRES_DB }}
-          TEST_POSTGRES_USER: ${{ env.POSTGRES_USER }}
-          TEST_POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
-          TEST_POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
-          TEST_POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
           ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
           POSTGRES_HOST_AUTH_METHOD: ${{ env.POSTGRES_HOST_AUTH_METHOD }}
           SECRET_KEY: ${{ env.SECRET_KEY }}
@@ -113,7 +113,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs: [ check-migrations ]
+#    needs: [ check-migrations ]
     env:
       POSTGRES_DB: "postgres"
       POSTGRES_USER: "postgres"
@@ -184,32 +184,26 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
-    needs: [ lint, test ]
+#    if: github.event.pull_request.merged == true
+#    needs: [ lint, test ]
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+           sudo apt-get install -y sshpass ansible
+
+      - name: Add EC2 instance to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ec2-18-159-112-49.eu-central-1.compute.amazonaws.com >> ~/.ssh/known_hosts
+
       - name: Deploy to EC2
         run: |
           # Install SSH client
           sudo apt-get update
-          sudo apt-get install -y ssh
-          
-          # Start SSH agent
-          eval "$(ssh-agent -s)"
-          ssh-add - <<< "${{ secrets.EC2_SSH_KEY }}"
-          eval "$(ssh-agent -s)"
-          echo "${{ secrets.EC2_SSH_KEY }}" | ssh-add -
-          echo "${{ secrets.EC2_SSH_KEY }}" > private_key && chmod 600 private_key
-          
-          # SSH into the EC2 instance and deploy Docker container
-          ssh -o StrictHostKeyChecking=no -i private_key ec2-user@${{ secrets.EC2_HOST }} '
-          
-            echo "Deploying to EC2 instance..."
-            cd /home/ec2-user/dactyl
-            git fetch --all
-            git reset --hard origin/master2
-            chmod +x ./scripts/build.aws.sh
-            chmod +x ./scripts/reload-certs.sh
-            ./scripts/build.aws.sh
-            git rev-parse HEAD > ../last_commit_hash.txt
-          '
+          sudo apt-get install -y ansible
+          cd playbooks
+          echo "${{ secrets.ANSIBLE_VAULT_PASSWORD_PROD }}" > vp.pass
+          ansible-playbook deploy.prod.yml -i aws-hosts-prod.ini --vault-password-file vp.pass

@@ -1,0 +1,64 @@
+- name: Check SSH connection
+  hosts: lh
+  gather_facts: no
+  vars_files:
+    - prod-vault.yml
+
+  tasks:
+    - name: Create SSH key file from vault variable
+      copy:
+        content: "{{ ec2_ssh_key }}"
+        dest: "./ec2_ssh_key.pem"
+        mode: '0600'
+
+- name: Run SSH job
+  hosts: aws
+  gather_facts: no
+  vars_files:
+    - prod-vault.yml
+
+  vars:
+    ansible_ssh_private_key_file: "./ec2_ssh_key.pem"
+    ansible_user: "{{ ec2user }}"
+    repo_dir: "/home/ec2-user/dactyl/"
+    dc_file: "docker-compose.aws.yml"
+  tasks:
+    - name: Ping test
+      ansible.builtin.ping:
+
+    - name: Hard reset master
+      ansible.builtin.command:
+        cmd: git reset --hard origin/test-deploy
+        chdir: "{{ repo_dir }}"
+      become: yes # if needed
+
+    - name: Run docker-compose build
+      ansible.builtin.command:
+          cmd: 'docker-compose -f "{{ dc_file }}" build --no-cache'
+          chdir: "{{ repo_dir }}"
+
+    - name: Run stop docker-compose
+      ansible.builtin.command:
+        cmd: 'docker-compose -f "{{ dc_file }}" stop'
+        chdir: "{{ repo_dir }}"
+
+    - name: Run start docker-compose
+      ansible.builtin.command:
+        cmd: 'docker-compose -f "{{ dc_file }}" up -d'
+        chdir: "{{ repo_dir }}"
+
+
+    - name: Migration
+      ansible.builtin.command:
+        cmd: docker-compose -f "{{ dc_file }}" exec api ./manage.py migrate
+        chdir: "{{ repo_dir }}"
+
+    - name: Remove containers
+      ansible.builtin.command:
+        cmd: 'docker system prune -a --volumes -f'
+        chdir: "{{ repo_dir }}"
+
+    - name: save last commit
+      ansible.builtin.shell:
+        cmd: "git rev-parse HEAD > ../last_commit_hash.txt"
+        chdir: "{{ repo_dir }}"
