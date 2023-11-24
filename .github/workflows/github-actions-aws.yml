@@ -86,7 +86,10 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           pip install poetry
-          poetry install
+          poetry install --no-root
+          echo $(pwd)
+          echo $(ls)
+          poetry run manage.py migrate
         working-directory: ./api
 
       - name: Wait for PostgreSQL
@@ -171,7 +174,7 @@ jobs:
       - name: Install dependencies with Poetry
         run: |
           pip install poetry
-          poetry install
+          poetry install --no-root
         working-directory: ./api
 
       - name: Wait for PostgreSQL
