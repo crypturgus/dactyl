@@ -96,6 +96,20 @@ jobs:
             sleep 2
           done
 
+      - name: Run existing migrations
+        run: poetry run manage.py migrate
+        env:
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_HOST: ${{ env.POSTGRES_HOST }}
+          POSTGRES_PORT: ${{ env.POSTGRES_PORT }}
+          ALLOWED_HOSTS: ${{ env.ALLOWED_HOSTS }}
+          POSTGRES_HOST_AUTH_METHOD: ${{ env.POSTGRES_HOST_AUTH_METHOD }}
+          SECRET_KEY: ${{ env.SECRET_KEY }}
+          JWT_SECRET_KEY: ${{ env.JWT_SECRET_KEY }}
+          USE_HTTPS: ${{ env.USE_HTTPS }}
+
       - name:  Check for missing migrations
         run: poetry run python manage.py makemigrations --check --dry-run
         working-directory: ./api
