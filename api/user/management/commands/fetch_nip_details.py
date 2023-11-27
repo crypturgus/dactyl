@@ -7,19 +7,20 @@ from company.company_data_fetcher import CompanyDataFetcher
 
 
 class Command(BaseCommand):
-    help = "Create a superuser"
+    help = "Fetch data for a given NIP"
 
-    def handle(self, *args, **kwargs):
+    def add_arguments(self, parser):
+        parser.add_argument("nip", type=str, help="NIP number to fetch data for")
+
+    def handle(self, *args, **options):
+        nip_number = options["nip"]
         self.stdout.write(
-            self.style.SUCCESS("Started fetching data for NIP 6141548074")
+            self.style.SUCCESS(f"Started fetching data for NIP {nip_number}")
         )
 
-        # TODO: Move browser api endpoint to env var
         company_data_fetcher = CompanyDataFetcher(
             browser_ws_endpoint=os.environ["BROWSER_URL"]
         )
-        # TODO: Make NIP number to be obtained as command arg
-        nip_number = "6141548074"
 
         async def main():
             firstname = await company_data_fetcher.fetch_data_for_nip(nip_number)
