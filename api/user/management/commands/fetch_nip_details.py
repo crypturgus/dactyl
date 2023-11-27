@@ -1,4 +1,5 @@
 import asyncio
+import os
 
 from django.core.management.base import BaseCommand
 
@@ -15,7 +16,7 @@ class Command(BaseCommand):
 
         # TODO: Move browser api endpoint to env var
         company_data_fetcher = CompanyDataFetcher(
-            browser_ws_endpoint="ws://browserless:3000"
+            browser_ws_endpoint=os.environ["BROWSER_URL"]
         )
         # TODO: Make NIP number to be obtained as command arg
         nip_number = "6141548074"
