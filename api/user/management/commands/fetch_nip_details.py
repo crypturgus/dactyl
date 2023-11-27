@@ -1,7 +1,8 @@
 import asyncio
 
-import pyppeteer
 from django.core.management.base import BaseCommand
+
+from company.company_data_fetcher import CompanyDataFetcher
 
 
 class Command(BaseCommand):
@@ -12,28 +13,16 @@ class Command(BaseCommand):
             self.style.SUCCESS("Started fetching data for NIP 6141548074")
         )
 
+        # TODO: Move browser api endpoint to env var
+        company_data_fetcher = CompanyDataFetcher(
+            browser_ws_endpoint="ws://browserless:3000"
+        )
+        # TODO: Make NIP number to be obtained as command arg
+        nip_number = "6141548074"
+
         async def main():
-            browser = await pyppeteer.connect(
-                options={"browserWSEndpoint": "ws://browserless:3000"}
-            )
-            page = await browser.newPage()
-            await page.goto(
-                "https://aplikacja.ceidg.gov.pl/ceidg/ceidg.public.ui/search.aspx"
-            )
-
-            await page.type("#MainContentForm_txtNip", "6141548074")
-            await page.click('[name="ctl00$MainContentForm$btnInputSearch"]')
-            await asyncio.sleep(1)
-            await page.click("#MainContentForm_DataListEntities_hrefDetails_0")
-            await asyncio.sleep(1)
-            element = await page.querySelector("#MainContentForm_lblFirstName")
-            firstname = await page.evaluate("(element) => element.textContent", element)
-
-            print(firstname)
-
-            await page.screenshot({"path": "example.png"})
-
-            await browser.close()
+            firstname = await company_data_fetcher.fetch_data_for_nip(nip_number)
+            self.stdout.write(f"First name for NIP {nip_number}: {firstname}")
 
         asyncio.get_event_loop().run_until_complete(main())
 
